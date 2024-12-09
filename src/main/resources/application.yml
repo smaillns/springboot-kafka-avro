@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: springboot-kafka-avro
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    consumer:
+      auto-offset-reset: latest
+      group-id: group-id
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          deserializer:
+            key:
+              delegate:
+                class: org.apache.kafka.common.serialization.StringDeserializer
+            value:
+              delegate:
+                class: com.example.demo.springbootkafkaavro.event.KafkaEventDeserializer
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: com.example.demo.springbootkafkaavro.event.KafkaEventSerializer
+
+logging:
+  level:
+    root: info
