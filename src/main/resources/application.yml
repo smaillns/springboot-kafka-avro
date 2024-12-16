@@ -2,9 +2,9 @@ spring:
   application:
     name: springboot-kafka-avro
 
+
   kafka:
     bootstrap-servers: localhost:9092
-
     consumer:
       auto-offset-reset: latest
       group-id: group-id
@@ -23,6 +23,10 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: com.example.demo.springbootkafkaavro.event.KafkaEventSerializer
+
+app:
+  kafka:
+    topic: my_topic
 
 logging:
   level:
