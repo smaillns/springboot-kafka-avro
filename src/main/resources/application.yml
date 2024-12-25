@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: springboot-kafka-avro
+  kafka:
+    #bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      value-serializer: com.example.demo.demokafka.event.KafkaEventSerializer
+    listener:
+      missing-topics-fatal: false
+
+app:
+  kafka:
+    retry:
+      topic:
+        main:
+          timems: ${KAFKA_RETRY_TIMEMS_MAIN_TOPIC:0}
+          max: ${KAFKA_RETRY_MAX_MAIN_TOPIC:0}
+        retry:
+          timems: ${KAFKA_RETRY_TIMEMS:30000}
+          max: ${KAFKA_RETRY_MAX:3}
+    my-consumer:
+      enabled: ${CONSUMER_ENABLED}
+      topic:
+        main: ${TOPIC_MAIN}
+        retry: ${TOPIC_RETRY}
+        error: ${TOPIC_DLT}
+      auto-offset-reset: latest
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}
+      client-id: ${KAFKA_CLIENT_ID}
+      group-id: ${KAFKA_GROUP_ID}
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      max-poll-records: 5
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        deserializer-key-delegate-class: org.apache.kafka.common.serialization.StringDeserializer
+        #deserializer-value-delegate-class: io.confluent.kafka.serializers.KafkaAvroDeserializer
+        deserializer-value-delegate-class: com.example.demo.demokafka.event.KafkaEventDeserializer
+        json-trusted-packages: '"*"'
+#        value-deserializer-specific-avro-reader: true
+      schema-registry:
+        auth: USER_INFO
+        security-protocol: PLAINTEXT # SSL
+        url: ${SCHEMA_REGISTRY_URL}
+        user: ${SCHEMA_REGISTRY_SERVICEUSER_USERNAME}:${SCHEMA_REGISTRY_SERVICEUSER_PASSWORD}
+#      ssl:
+#        key-store-certificate-chain: ${MASTERSHIP_SSL_KEYSTORE_CERTIFICATE_CHAIN}
+#        key-store-key: ${MASTERSHIP_SSL_KEYSTORE_KEY}
+#        key-store-type: PEM
+#        trust-store-certificates: ${MASTERSHIP_SSL_TRUSTSTORE_CERTIFICATES}
+#        trust-store-type: PEM
+
+
+logging:
+  level:
+    root: info
