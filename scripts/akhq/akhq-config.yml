@@ -8,8 +8,8 @@ akhq:
       schema-registry:
         enabled: true
         url: http://localhost:8081
-        basic-auth-username: user
-        basic-auth-password: password
+#        basic-auth-username: user
+#        basic-auth-password: password
 micronaut:
   server:
     port: 8089

@@ -1,6 +1,6 @@
 package com.example.demo.demokafka.consumer;
 
-import com.example.demo.demokafka.event.Event;
+import com.example.demo.demokafka.event.MyEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -27,7 +27,7 @@ public class MyKafkaConsumer {
             containerFactory = "myListenerFactory",
             autoStartup = "${app.kafka.my-consumer.enabled}"
     )
-    public void consumePaymentEvents(ConsumerRecord<String, Event> consumerRecord) throws Exception {
+    public void consumePaymentEvents(ConsumerRecord<String, MyEvent> consumerRecord) throws Exception {
         log.info("received event: {}", consumerRecord);
         throw new Exception("test");
     }

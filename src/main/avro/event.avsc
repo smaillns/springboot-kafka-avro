@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "MyEvent",
+  "namespace": "com.example.demo.demokafka.event",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long"
+    },
+    {
+      "name": "label",
+      "type": "string"
+    }
+  ]
+}

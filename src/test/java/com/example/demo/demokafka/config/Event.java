@@ -1,4 +1,4 @@
-package com.example.demo.demokafka.event;
+package com.example.demo.demokafka.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

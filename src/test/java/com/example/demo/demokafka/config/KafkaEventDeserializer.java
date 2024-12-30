@@ -1,5 +1,6 @@
-package com.example.demo.demokafka.event;
+package com.example.demo.demokafka.config;
 
+import com.example.demo.demokafka.event.MyEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
@@ -25,7 +26,7 @@ public class KafkaEventDeserializer implements Deserializer<Object> {
                 throw new SerializationException("Can't deserialize null");
             }
             objectMapper.findAndRegisterModules();
-            return objectMapper.readValue(new String(bytes, StandardCharsets.UTF_8), Event.class);
+            return objectMapper.readValue(new String(bytes, StandardCharsets.UTF_8), MyEvent.class);
 
         } catch (Exception e) {
             throw new SerializationException("Error when deserializing to Event: " + e.getLocalizedMessage());

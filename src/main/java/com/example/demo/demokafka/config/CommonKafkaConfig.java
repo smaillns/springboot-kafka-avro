@@ -18,23 +18,15 @@ import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.Map;
 
-import static io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig.BASIC_AUTH_CREDENTIALS_SOURCE;
 import static io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG;
-import static io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig.USER_INFO_CONFIG;
 import static io.confluent.kafka.serializers.KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG;
-import static org.apache.kafka.clients.CommonClientConfigs.SECURITY_PROTOCOL_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.MAX_POLL_RECORDS_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
-import static org.apache.kafka.common.config.SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG;
-import static org.apache.kafka.common.config.SslConfigs.SSL_KEYSTORE_CERTIFICATE_CHAIN_CONFIG;
-import static org.apache.kafka.common.config.SslConfigs.SSL_KEYSTORE_KEY_CONFIG;
-import static org.apache.kafka.common.config.SslConfigs.SSL_KEYSTORE_TYPE_CONFIG;
-import static org.apache.kafka.common.config.SslConfigs.SSL_TRUSTSTORE_CERTIFICATES_CONFIG;
-import static org.apache.kafka.common.config.SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG;
 
 @Data
 @Configuration
@@ -46,7 +38,6 @@ public class CommonKafkaConfig<K, V> {
 	protected int maxPollRecords;
 	protected String autoOffsetReset;
 	protected String groupId;
-	protected Ssl ssl;
 	protected SchemaRegistry schemaRegistry;
 	protected Properties properties;
 	protected FixedBackOff fixedBackOffMain;
@@ -76,11 +67,12 @@ public class CommonKafkaConfig<K, V> {
 		properties.put(MAX_POLL_RECORDS_CONFIG, maxPollRecords);
 		properties.put(GROUP_ID_CONFIG, groupId);
 		buildRegistryProperties(properties);
-//		buildSslProperties(properties);
+
 		properties.put("spring.json.trusted.packages", this.properties.getJsonTrustedPackages());
 		properties.put("spring.deserializer.key.delegate.class", this.properties.getDeserializerKeyDelegateClass());
 		properties.put("spring.deserializer.value.delegate.class", this.properties.getDeserializerValueDelegateClass());
 		properties.put(SPECIFIC_AVRO_READER_CONFIG, this.properties.isValueDeserializerSpecificAvroReader());
+		properties.put(ENABLE_AUTO_COMMIT_CONFIG, false);
 
 		return new DefaultKafkaConsumerFactory<>(properties);
 	}
@@ -94,18 +86,6 @@ public class CommonKafkaConfig<K, V> {
 
 	private void buildRegistryProperties(Map<String, Object> properties) {
 		properties.put(SCHEMA_REGISTRY_URL_CONFIG, schemaRegistry.getUrl());
-		properties.put(BASIC_AUTH_CREDENTIALS_SOURCE, schemaRegistry.getAuth());
-		properties.put(USER_INFO_CONFIG, schemaRegistry.getUser());
-		properties.put(SECURITY_PROTOCOL_CONFIG, schemaRegistry.getSecurityProtocol());
-		properties.compute(SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, (s, o) -> StringUtils.EMPTY);
-	}
-
-	private void buildSslProperties(Map<String, Object> properties) {
-		properties.put(SSL_KEYSTORE_KEY_CONFIG, ssl.getKeyStoreKey());
-		properties.put(SSL_KEYSTORE_CERTIFICATE_CHAIN_CONFIG, ssl.getKeyStoreCertificateChain());
-		properties.put(SSL_KEYSTORE_TYPE_CONFIG, ssl.getKeyStoreType());
-		properties.put(SSL_TRUSTSTORE_CERTIFICATES_CONFIG, ssl.getTrustStoreCertificates());
-		properties.put(SSL_TRUSTSTORE_TYPE_CONFIG, ssl.getTrustStoreType());
 	}
 
 
@@ -141,21 +121,10 @@ public class CommonKafkaConfig<K, V> {
 		return factory;
 	}
 
-	@Data
-	public static class Ssl {
-		String keyStoreKey;
-		String keyStoreCertificateChain;
-		String keyStoreType;
-		String trustStoreCertificates;
-		String trustStoreType;
-	}
 
 	@Data
 	public static class SchemaRegistry {
 		String url;
-		String auth;
-		String user;
-		String securityProtocol;
 	}
 
 	@Data

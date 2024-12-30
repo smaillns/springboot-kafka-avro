@@ -2,11 +2,10 @@ spring:
   application:
     name: springboot-kafka-avro
   kafka:
-    #bootstrap-servers: localhost:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      # value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-      value-serializer: com.example.demo.demokafka.event.KafkaEventSerializer
+#      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      value-serializer: com.example.demo.demokafka.config.KafkaEventSerializer
     listener:
       missing-topics-fatal: false
 
@@ -35,21 +34,12 @@ app:
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       properties:
         deserializer-key-delegate-class: org.apache.kafka.common.serialization.StringDeserializer
-        #deserializer-value-delegate-class: io.confluent.kafka.serializers.KafkaAvroDeserializer
-        deserializer-value-delegate-class: com.example.demo.demokafka.event.KafkaEventDeserializer
+#        deserializer-value-delegate-class: io.confluent.kafka.serializers.KafkaAvroDeserializer
+        deserializer-value-delegate-class: com.example.demo.demokafka.config.KafkaEventDeserializer
         json-trusted-packages: '"*"'
-#        value-deserializer-specific-avro-reader: true
+        value-deserializer-specific-avro-reader: true
       schema-registry:
-        auth: USER_INFO
-        security-protocol: PLAINTEXT # SSL
         url: ${SCHEMA_REGISTRY_URL}
-        user: ${SCHEMA_REGISTRY_SERVICEUSER_USERNAME}:${SCHEMA_REGISTRY_SERVICEUSER_PASSWORD}
-#      ssl:
-#        key-store-certificate-chain: ${MASTERSHIP_SSL_KEYSTORE_CERTIFICATE_CHAIN}
-#        key-store-key: ${MASTERSHIP_SSL_KEYSTORE_KEY}
-#        key-store-type: PEM
-#        trust-store-certificates: ${MASTERSHIP_SSL_TRUSTSTORE_CERTIFICATES}
-#        trust-store-type: PEM
 
 
 logging:
