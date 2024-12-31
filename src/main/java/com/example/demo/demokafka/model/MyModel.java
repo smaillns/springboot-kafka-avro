@@ -1,6 +1,5 @@
-package com.example.demo.demokafka.config;
+package com.example.demo.demokafka.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,11 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Event {
+public class MyModel {
 
-    @JsonProperty("id")
-    private long id;
-
-    @JsonProperty("label")
+    private Long id;
     private String label;
+
+    public boolean isValid() {
+        return id != 0;
+    }
 }
+

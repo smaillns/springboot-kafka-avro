@@ -4,8 +4,8 @@ spring:
   kafka:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-      value-serializer: com.example.demo.demokafka.config.KafkaEventSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+#      value-serializer: com.example.demo.demokafka.config.KafkaEventSerializer
     listener:
       missing-topics-fatal: false
 
@@ -34,8 +34,8 @@ app:
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       properties:
         deserializer-key-delegate-class: org.apache.kafka.common.serialization.StringDeserializer
-#        deserializer-value-delegate-class: io.confluent.kafka.serializers.KafkaAvroDeserializer
-        deserializer-value-delegate-class: com.example.demo.demokafka.config.KafkaEventDeserializer
+        deserializer-value-delegate-class: io.confluent.kafka.serializers.KafkaAvroDeserializer
+#        deserializer-value-delegate-class: com.example.demo.demokafka.config.KafkaEventDeserializer
         json-trusted-packages: '"*"'
         value-deserializer-specific-avro-reader: true
       schema-registry:

@@ -1,12 +1,10 @@
 spring:
-  application:
-    name: springboot-kafka-avro
+  profiles:
+    active: test
   kafka:
-#    bootstrap-servers: localhost:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-#      value-serializer: com.example.demo.demokafka.config.KafkaEventSerializer
     listener:
       missing-topics-fatal: false
 
@@ -15,11 +13,11 @@ app:
     retry:
       topic:
         main:
-          timems: ${KAFKA_RETRY_TIMEMS_MAIN_TOPIC:0}
-          max: ${KAFKA_RETRY_MAX_MAIN_TOPIC:0}
+          timems: 0
+          max: 0
         retry:
-          timems: ${KAFKA_RETRY_TIMEMS:10000}
-          max: ${KAFKA_RETRY_MAX:1}
+          timems: 0
+          max: 0
     my-consumer:
       enabled: true
       topic:
@@ -36,12 +34,10 @@ app:
       properties:
         deserializer-key-delegate-class: org.apache.kafka.common.serialization.StringDeserializer
         deserializer-value-delegate-class: io.confluent.kafka.serializers.KafkaAvroDeserializer
-#        deserializer-value-delegate-class: com.example.demo.demokafka.config.KafkaEventDeserializer
         json-trusted-packages: '"*"'
-#        value-deserializer-specific-avro-reader: true
+        value-deserializer-specific-avro-reader: true
       schema-registry:
         url: http://localhost:${wiremock.server.port}/
-
 
 logging:
   level:

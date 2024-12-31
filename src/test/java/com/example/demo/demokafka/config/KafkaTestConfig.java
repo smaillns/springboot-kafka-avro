@@ -1,7 +1,6 @@
 package com.example.demo.demokafka.config;
 
 import com.example.demo.demokafka.event.MyEvent;
-import io.confluent.kafka.schemaregistry.client.rest.entities.SchemaString;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
