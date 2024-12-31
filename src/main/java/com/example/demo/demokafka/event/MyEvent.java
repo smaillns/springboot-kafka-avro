@@ -6,7 +6,6 @@
 package com.example.demo.demokafka.event;
 
 import org.apache.avro.specific.SpecificData;
-import org.apache.avro.util.Utf8;
 import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.BinaryMessageDecoder;
 import org.apache.avro.message.SchemaStore;
@@ -16,7 +15,7 @@ public class MyEvent extends org.apache.avro.specific.SpecificRecordBase impleme
   private static final long serialVersionUID = -801236921340369965L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"MyEvent\",\"namespace\":\"com.example.demo.demokafka.event\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"label\",\"type\":\"string\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"MyEvent\",\"namespace\":\"com.example.demo.demokafka.event\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"label\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -73,7 +72,7 @@ public class MyEvent extends org.apache.avro.specific.SpecificRecordBase impleme
   }
 
   private long id;
-  private java.lang.CharSequence label;
+  private java.lang.String label;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -87,7 +86,7 @@ public class MyEvent extends org.apache.avro.specific.SpecificRecordBase impleme
    * @param id The new value for id
    * @param label The new value for label
    */
-  public MyEvent(java.lang.Long id, java.lang.CharSequence label) {
+  public MyEvent(java.lang.Long id, java.lang.String label) {
     this.id = id;
     this.label = label;
   }
@@ -114,7 +113,7 @@ public class MyEvent extends org.apache.avro.specific.SpecificRecordBase impleme
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: id = (java.lang.Long)value$; break;
-    case 1: label = (java.lang.CharSequence)value$; break;
+    case 1: label = value$ != null ? value$.toString() : null; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -140,7 +139,7 @@ public class MyEvent extends org.apache.avro.specific.SpecificRecordBase impleme
    * Gets the value of the 'label' field.
    * @return The value of the 'label' field.
    */
-  public java.lang.CharSequence getLabel() {
+  public java.lang.String getLabel() {
     return label;
   }
 
@@ -149,7 +148,7 @@ public class MyEvent extends org.apache.avro.specific.SpecificRecordBase impleme
    * Sets the value of the 'label' field.
    * @param value the value to set.
    */
-  public void setLabel(java.lang.CharSequence value) {
+  public void setLabel(java.lang.String value) {
     this.label = value;
   }
 
@@ -195,7 +194,7 @@ public class MyEvent extends org.apache.avro.specific.SpecificRecordBase impleme
     implements org.apache.avro.data.RecordBuilder<MyEvent> {
 
     private long id;
-    private java.lang.CharSequence label;
+    private java.lang.String label;
 
     /** Creates a new Builder */
     private Builder() {
@@ -277,7 +276,7 @@ public class MyEvent extends org.apache.avro.specific.SpecificRecordBase impleme
       * Gets the value of the 'label' field.
       * @return The value.
       */
-    public java.lang.CharSequence getLabel() {
+    public java.lang.String getLabel() {
       return label;
     }
 
@@ -287,7 +286,7 @@ public class MyEvent extends org.apache.avro.specific.SpecificRecordBase impleme
       * @param value The value of 'label'.
       * @return This builder.
       */
-    public com.example.demo.demokafka.event.MyEvent.Builder setLabel(java.lang.CharSequence value) {
+    public com.example.demo.demokafka.event.MyEvent.Builder setLabel(java.lang.String value) {
       validate(fields()[1], value);
       this.label = value;
       fieldSetFlags()[1] = true;
@@ -319,7 +318,7 @@ public class MyEvent extends org.apache.avro.specific.SpecificRecordBase impleme
       try {
         MyEvent record = new MyEvent();
         record.id = fieldSetFlags()[0] ? this.id : (java.lang.Long) defaultValue(fields()[0]);
-        record.label = fieldSetFlags()[1] ? this.label : (java.lang.CharSequence) defaultValue(fields()[1]);
+        record.label = fieldSetFlags()[1] ? this.label : (java.lang.String) defaultValue(fields()[1]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -365,7 +364,7 @@ public class MyEvent extends org.apache.avro.specific.SpecificRecordBase impleme
     if (fieldOrder == null) {
       this.id = in.readLong();
 
-      this.label = in.readString(this.label instanceof Utf8 ? (Utf8)this.label : null);
+      this.label = in.readString();
 
     } else {
       for (int i = 0; i < 2; i++) {
@@ -375,7 +374,7 @@ public class MyEvent extends org.apache.avro.specific.SpecificRecordBase impleme
           break;
 
         case 1:
-          this.label = in.readString(this.label instanceof Utf8 ? (Utf8)this.label : null);
+          this.label = in.readString();
           break;
 
         default:

@@ -31,6 +31,8 @@
         <avro.kafka.version>7.7.1</avro.kafka.version>
         <avro.version>1.12.0</avro.version>
         <lombock.version>1.18.24</lombock.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <avro-maven-plugin.version>1.12.0</avro-maven-plugin.version>
     </properties>
     <dependencies>
         <!-- web -->
@@ -116,6 +118,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -141,19 +144,37 @@
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro-maven-plugin</artifactId>
                 <version>${avro.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>schema</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirectory>${project.basedir}/src/main/avro</sourceDirectory>
-                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.avro</groupId>
+                    <artifactId>avro-maven-plugin</artifactId>
+                    <version>${avro-maven-plugin.version}</version>
+                    <configuration>
+                        <fieldVisibility>private</fieldVisibility>
+                        <stringType>String</stringType>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>schemas</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>schema</goal>
+                                <goal>protocol</goal>
+                                <goal>idl-protocol</goal>
+                            </goals>
+                            <configuration>
+                                <sourceDirectory>${project.basedir}/src/main/avro</sourceDirectory>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
 
     </build>
 
