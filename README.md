@@ -49,28 +49,36 @@ project/
 ```
 
 
-## Prerequisites
+## Local Development with Docker
+
+
+### Prerequisites
 
 - Docker and Docker Compose
 - Java 23
 - Maven
 
-## Setup
 
 ### Docker Compose
 
-To launch Kafka and Schema Registry locally, use the provided `docker-compose.yml` file.
+To launch Kafka and Schema Registry locally, use the provided `docker-compose.yml` file in the `/scripts` folder.
 
 ```sh
 docker-compose up -d
 ```
+After running the docker-compose command, you should have running services, a Kafka broker, and a Schema Registry accessible from the local machine 🎉
 
-## AKHQ
-To launch AKHQ, add a new IntelliJ IDEA configuration with the following shell script:
+### AKHQ
+> Note: AKHQ is an optional tool to manage and monitor your Kafka topics and schemas through a UI.
+
+You need to first to download the AKHQ jar, you can use the following link [Download AKHQ](https://akhq.io/docs/installation.html)
+
+To launch AKHQ, run the following commnad
 ```sh
 java -Dmicronaut.config.files=scripts/akhq/akhq-config.yml -jar scripts/akhq/akhq.jar
 ```
 
+This will start AKHQ with the specified configuration file, allowing you to manage and monitor your Kafka topics and schemas.
 
 ## Configuration
 ### Kafka Configuration
