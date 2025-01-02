@@ -8,7 +8,7 @@
 >
 > The setup includes Kafka configuration used in the [eyes-flows](https://github.com/dktunited/eyes-visibility) project, essential properties required to connect and interact with a Kafka broker.
 
-[!NOTE]
+> [!NOTE]
 > The purpose is to focus on the Kafka configuration and make a POC of integration tests using two methods:
 > 1. Using the `EmbeddedKafka` provided by Spring in the `spring-kafka-test` dependency.
 > 2. Setting up a Testcontainers ecosystem with Kafka, Zookeeper, and Confluent Schema Registry.
