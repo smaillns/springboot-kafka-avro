@@ -11,7 +11,7 @@
 > [!NOTE]
 > The purpose is to focus on the Kafka configuration and make a POC of integration tests using two methods:
 > 1. Using the `EmbeddedKafka` provided by Spring in the `spring-kafka-test` dependency.
-> ~~2. Setting up a Testcontainers ecosystem with Kafka, Zookeeper, and Confluent Schema Registry~~.
+> 2. ~~Setting up a Testcontainers ecosystem with Kafka, Zookeeper, and Confluent Schema Registry~~.
 
 
 ## Project Structure
@@ -27,16 +27,11 @@ project/
 │   ├── src/
 │   │   ├── main/
 │   │   │   ├── avro/
-│   │   │   └── resources/
 │   └── pom.xml
 ├── my-service/
 │   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/
-│   │   │   └── resources/
+│   │   ├── main/java/
 │   │   ├── test/
-│   │   │   ├── java/
-│   │   │   └── resources/
 │   └── pom.xml
 ├── scripts/
 │   ├── docker/
@@ -81,6 +76,14 @@ java -Dmicronaut.config.files=scripts/akhq/akhq-config.yml -jar scripts/akhq/akh
 This will start AKHQ with the specified configuration file, allowing you to manage and monitor your Kafka topics and schemas.
 
 ## Configuration
+
+<div >
+  <img src="./architecture.png" alt="Architecture" width="75%" />
+  <p><em>MyService Architecture</em></p>
+</div>
+
+
+
 ### Kafka Configuration
 The current configuration uses a retry topic and a DLT (Dead Letter Topic). The number of retries, delay, and other properties are configured in the application configuration files.
 
