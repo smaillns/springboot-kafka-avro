@@ -1,19 +1,53 @@
 
-# Kafka Avro Serialization with Schema Registry 
+## Kafka Avro Serialization with Schema Registry 
 
 
-**Note: This README is a work in progress.**
+## About
 
+> This project demonstrates the usage of Kafka Schema Registry with Avro serialization in a Spring Boot application. 
+>
+> The setup includes Kafka configuration used in the [eyes-flows](https://github.com/dktunited/eyes-visibility) project, essential properties required to connect and interact with a Kafka broker.
 
-This project demonstrates the usage of Kafka Schema Registry with Avro serialization in a Spring Boot application. The setup includes Kafka configuration used in the [eyes-flows](https://github.com/dktunited/eyes-visibility) project, essential properties required to connect and interact with a Kafka broker. The purpose is to focus on this configuration and make a POC of integration tests using two methods:
-1. Using the `EmbeddedKafka` provided by Spring in the `spring-kafka-test` dependency.
-2. Setting up a Testcontainers ecosystem with Kafka, Zookeeper, and Confluent Schema Registry.
+[!NOTE]
+> The purpose is to focus on the Kafka configuration and make a POC of integration tests using two methods:
+> 1. Using the `EmbeddedKafka` provided by Spring in the `spring-kafka-test` dependency.
+> 2. Setting up a Testcontainers ecosystem with Kafka, Zookeeper, and Confluent Schema Registry.
+
 
 ## Project Structure
 
 The project is modular, consisting of:
-- `demo-service`: The main service module.
-- `avro-schema`: A module for Avro schemas.
+- `avro-schema`: A module for Avro schemas generation and management.
+- `my-service`: The main service module that includes the Spring Boot application, the kafka configuration and the integrationtests
+
+the directory structure of the project is as follows
+```
+project/
+├── avro-schema/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── avro/
+│   │   │   └── resources/
+│   └── pom.xml
+├── my-service/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   └── resources/
+│   │   ├── test/
+│   │   │   ├── java/
+│   │   │   └── resources/
+│   └── pom.xml
+├── scripts/
+│   ├── docker/
+│   │   └── docker-compose.yml
+│   └── akhq/
+│       ├── akhq-config.yml
+│       └── akhq.jar
+├── pom.xml
+└── README.md
+```
+
 
 ## Prerequisites
 
