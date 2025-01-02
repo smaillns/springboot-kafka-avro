@@ -1,4 +1,9 @@
-# Kafka Avro Serialization with Schema Registry
+
+# Kafka Avro Serialization with Schema Registry 
+
+
+**Note: This README is a work in progress.**
+
 
 This project demonstrates the usage of Kafka Schema Registry with Avro serialization in a Spring Boot application. The setup includes Kafka configuration used in the [eyes-flows](https://github.com/dktunited/eyes-visibility) project, essential properties required to connect and interact with a Kafka broker. The purpose is to focus on this configuration and make a POC of integration tests using two methods:
 1. Using the `EmbeddedKafka` provided by Spring in the `spring-kafka-test` dependency.
