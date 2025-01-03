@@ -126,9 +126,9 @@ mvn clean test
 
 ## Additional Resources
 For more information on Kafka, Avro, and Schema Registry, you can refer to the following resources:
-[Apache Kafka Documentation](https://kafka.apache.org/documentation/)
-[Confluent Schema Registry Documentation](https://docs.confluent.io/platform/current/schema-registry/index.html)
-[Spring for Apache Kafka](https://spring.io/projects/spring-kafka)
-[Avro Documentation](https://avro.apache.org/docs/++version++/index
+- [Apache Kafka Documentation](https://kafka.apache.org/documentation/)
+- [Confluent Schema Registry Documentation](https://docs.confluent.io/platform/current/schema-registry/index.html)
+- [Spring for Apache Kafka](https://spring.io/projects/spring-kafka)
+- [Avro Documentation](https://avro.apache.org/docs/++version++/index
 
 
