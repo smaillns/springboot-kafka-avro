@@ -117,9 +117,18 @@ A Testcontainers ecosystem is set up with Kafka, Zookeeper, and Confluent Schema
 ### Running Tests
 To run the integration tests, use the following command:
     
-    ```sh   
-    mvn clean test
-    ```
+```sh   
+mvn clean test
+```
 
-### Kafka Mechanism
-The current configuration uses a retry topic and a DLT (Dead Letter Topic). The number of retries, delay, and other properties are configured in the application configuration files. The retry mechanism ensures that messages are retried a specified number of times before being sent to the DLT.
+
+-----
+
+## Additional Resources
+For more information on Kafka, Avro, and Schema Registry, you can refer to the following resources:
+[Apache Kafka Documentation](https://kafka.apache.org/documentation/)
+[Confluent Schema Registry Documentation](https://docs.confluent.io/platform/current/schema-registry/index.html)
+[Spring for Apache Kafka](https://spring.io/projects/spring-kafka)
+[Avro Documentation](https://avro.apache.org/docs/++version++/index
+
+
