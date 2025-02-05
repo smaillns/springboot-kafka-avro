@@ -1,4 +1,5 @@
 
+
 ## Kafka Avro Serialization with Schema Registry 
 
 
@@ -121,6 +122,7 @@ To run the integration tests, use the following command:
 mvn clean test
 ```
 
+looks at integration testing the application using Spring Boot test, with the embedded Kafka broker and a wiremocked Schema Registry.
 
 -----
 
