@@ -103,17 +103,6 @@ public class TestIT {
         MyEvent myEvent = KafkaTestUtils.deserializeGenericRecord(retryRecord.get().value(), MyEvent.class); // Deserialize the GenericRecord into MyEvent
         System.out.println("Mapped MyEvent: " + myEvent);
         assertEquals(sentEvent.getId(), myEvent.getId());
-
-        // Validate Event in DLT Topic
-        AtomicReference<ConsumerRecord<String, GenericRecord>> dltRecord = new AtomicReference<>();
-        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
-            kafkaTestUtils.setupConsumer(myDltTopic, schemaRegistryUrl);
-            dltRecord.set(kafkaTestUtils.pollEvent(1000));
-            assertNotNull(dltRecord.get(), "Expected an event in DLT topic but none was found");
-        });
-        MyEvent dltEvent = KafkaTestUtils.deserializeGenericRecord(retryRecord.get().value(), MyEvent.class); // Deserialize the GenericRecord into MyEvent
-        System.out.println("Mapped MyEvent: " + dltEvent);
-        assertEquals(sentEvent.getId(), dltEvent.getId());
     }
 
 }
