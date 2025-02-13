@@ -1,6 +1,7 @@
 package com.example.demo.demokafka;
 
 import com.example.demo.demokafka.config.KafkaTestConfig;
+import com.example.demo.demokafka.config.PostgresTestConfig;
 import com.example.demo.demokafka.core.adapter.db.entity.MyEntity;
 import com.example.demo.demokafka.core.adapter.db.repository.MyRepository;
 import com.example.demo.demokafka.event.MyEvent;
@@ -46,38 +47,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         partitions = 1,
         controlledShutdown = true)
 @AutoConfigureWireMock(port = 0)
-@ContextConfiguration(classes = {KafkaTestConfig.class})
+@ContextConfiguration(classes = {KafkaTestConfig.class, PostgresTestConfig.class})
 @Testcontainers
 @SpringBootTest
 public class TestIT {
-
-
-    @Container
-    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest")
-            .withDatabaseName("testdb")
-            .withUsername("testuser")
-            .withPassword("testpassword");
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        // Override Spring Boot properties with Testcontainers PostgreSQL connection details
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-    }
-
-    @BeforeEach
-    void setUp()  {
-        kafkaTestUtils = new KafkaTestUtils(embeddedKafkaBroker);
-
-        WireMock.reset();
-    }
-
-    @AfterEach
-    void tearDown() {
-        kafkaTestUtils.stopConsumer();
-    }
-
 
     @Autowired
     KafkaTemplate<String, MyEvent> kafkaTemplate;
@@ -104,6 +77,18 @@ public class TestIT {
     private MyRepository myRepository;
 
     private KafkaTestUtils kafkaTestUtils;
+
+
+    @BeforeEach
+    void setUp()  {
+        kafkaTestUtils = new KafkaTestUtils(embeddedKafkaBroker);
+        WireMock.reset();
+    }
+
+    @AfterEach
+    void tearDown() {
+        kafkaTestUtils.stopConsumer();
+    }
 
 
     @Test

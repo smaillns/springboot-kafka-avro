@@ -10,21 +10,21 @@ import javax.sql.DataSource;
 @TestConfiguration
 public class PostgresTestConfig {
 
-//    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
-//
-//    static {
-//        postgres.start();
-//        System.setProperty("spring.datasource.url", postgres.getJdbcUrl());
-//        System.setProperty("spring.datasource.username", postgres.getUsername());
-//        System.setProperty("spring.datasource.password", postgres.getPassword());
-//    }
-//
-//    @Bean
-//    public DataSource dataSource() {
-//        HikariDataSource dataSource = new HikariDataSource();
-//        dataSource.setJdbcUrl(postgres.getJdbcUrl());
-//        dataSource.setUsername(postgres.getUsername());
-//        dataSource.setPassword(postgres.getPassword());
-//        return dataSource;
-//    }
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
+
+    static {
+        postgres.start();
+        System.setProperty("spring.datasource.url", postgres.getJdbcUrl());
+        System.setProperty("spring.datasource.username", postgres.getUsername());
+        System.setProperty("spring.datasource.password", postgres.getPassword());
+    }
+
+    @Bean
+    public DataSource dataSource() {
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setJdbcUrl(postgres.getJdbcUrl());
+        dataSource.setUsername(postgres.getUsername());
+        dataSource.setPassword(postgres.getPassword());
+        return dataSource;
+    }
 }
