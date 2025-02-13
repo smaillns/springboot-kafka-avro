@@ -1,6 +1,8 @@
 package com.example.demo.demokafka;
 
 import com.example.demo.demokafka.config.KafkaTestConfig;
+import com.example.demo.demokafka.core.adapter.db.entity.MyEntity;
+import com.example.demo.demokafka.core.adapter.db.repository.MyRepository;
 import com.example.demo.demokafka.event.MyEvent;
 import com.example.demo.demokafka.utils.KafkaTestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +12,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,27 +23,61 @@ import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 @ExtendWith(MockitoExtension.class)
 @DirtiesContext
-@SpringBootTest
 @EmbeddedKafka(brokerProperties = {"listeners=PLAINTEXT://localhost:9092"},
         partitions = 1,
         controlledShutdown = true)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @AutoConfigureWireMock(port = 0)
 @ContextConfiguration(classes = {KafkaTestConfig.class})
+@Testcontainers
+@SpringBootTest
 public class TestIT {
+
+
+    @Container
+    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest")
+            .withDatabaseName("testdb")
+            .withUsername("testuser")
+            .withPassword("testpassword");
+
+    @DynamicPropertySource
+    static void configureProperties(DynamicPropertyRegistry registry) {
+        // Override Spring Boot properties with Testcontainers PostgreSQL connection details
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+    }
+
+    @BeforeEach
+    void setUp()  {
+        kafkaTestUtils = new KafkaTestUtils(embeddedKafkaBroker);
+
+        WireMock.reset();
+    }
+
+    @AfterEach
+    void tearDown() {
+        kafkaTestUtils.stopConsumer();
+    }
+
 
     @Autowired
     KafkaTemplate<String, MyEvent> kafkaTemplate;
@@ -65,23 +100,32 @@ public class TestIT {
     @Autowired
     private EmbeddedKafkaBroker embeddedKafkaBroker;
 
+    @Autowired
+    private MyRepository myRepository;
 
     private KafkaTestUtils kafkaTestUtils;
 
-    @BeforeEach
-    void setUp()  {
-        kafkaTestUtils = new KafkaTestUtils(embeddedKafkaBroker);
 
-        WireMock.reset();
-    }
+    @Test
+    void testEventIsConsumedAndSavedToDatabase() throws Exception {
 
-    @AfterEach
-    void tearDown() {
-        kafkaTestUtils.stopConsumer();
+        kafkaTestUtils.registerSchema(1, myMainTopic, MyEvent.getClassSchema().toString());
+        kafkaTestUtils.registerSchema(1, myRetryTopic, MyEvent.getClassSchema().toString());
+        kafkaTestUtils.registerSchema(1, myDltTopic, MyEvent.getClassSchema().toString());
+
+        // Send Event
+        File EVENT_JSON = Paths.get("src", "test", "resources", "events", "event.json").toFile();
+        MyEvent sentEvent = objectMapper.readValue(EVENT_JSON, MyEvent.class);
+        kafkaTemplate.send(myMainTopic, "1", sentEvent);
+
+        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
+            Optional<MyEntity> savedEntity = myRepository.findById(sentEvent.getId());
+            savedEntity.ifPresent(myEntity -> assertEquals(sentEvent.getLabel(), myEntity.toModel().getLabel(), "The saved item should have the same id as the sent item"));
+        });
     }
 
     @Test
-    void test_event_flow_to_retry_and_dlt_topics() throws Exception {
+    void testEventFlowToRetryTopic() throws Exception {
 
         kafkaTestUtils.registerSchema(1, myMainTopic, MyEvent.getClassSchema().toString());
         kafkaTestUtils.registerSchema(1, myRetryTopic, MyEvent.getClassSchema().toString());
@@ -91,7 +135,6 @@ public class TestIT {
         File EVENT_JSON = Paths.get("src", "test", "resources", "events", "invalid-event.json").toFile();
         MyEvent sentEvent = objectMapper.readValue(EVENT_JSON, MyEvent.class);
         kafkaTemplate.send(myMainTopic, "1", sentEvent);
-
 
         // Validate Event in Retry Topic
         AtomicReference<ConsumerRecord<String, GenericRecord>> retryRecord = new AtomicReference<>();

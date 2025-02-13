@@ -8,10 +8,6 @@ spring:
 #      value-serializer: com.example.demo.demokafka.config.KafkaEventSerializer
     listener:
       missing-topics-fatal: false
-  datasource:
-    url: jdbc:postgresql://${DATABASE_URL}/mydatabase
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update

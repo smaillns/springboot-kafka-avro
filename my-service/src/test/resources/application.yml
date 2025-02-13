@@ -7,6 +7,17 @@ spring:
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
     listener:
       missing-topics-fatal: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mydatabase
+    username: user
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 app:
   kafka:
@@ -42,3 +53,5 @@ app:
 logging:
   level:
     root: info
+    org:
+      testcontainers: debug

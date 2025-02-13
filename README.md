@@ -105,6 +105,9 @@ app:
       url: http://localhost:8081
 ```
 
+## Running the application
+// .env file
+
 
 ## Integration Test
 ### Using EmbeddedKafka
@@ -113,7 +116,9 @@ The `EmbeddedKafka` provided by Spring in the `spring-kafka-test` dependency is 
 
 ### Using Testcontainers
 A Testcontainers ecosystem is set up with Kafka, Zookeeper, and Confluent Schema Registry for integration tests.
-
+-- require docker
+add testcontainers.properties 
+or add this env variable  DOCKER_HOST=unix:///Users/mac-Z12SLOUN/.colima/default/docker.sock
 
 ### Running Tests
 To run the integration tests, use the following command:

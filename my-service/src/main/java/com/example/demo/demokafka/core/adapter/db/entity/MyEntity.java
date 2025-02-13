@@ -31,5 +31,12 @@ public class MyEntity {
                 .build();
     }
 
+    public MyModel toModel() {
+        return MyModel.builder()
+                .id(id)
+                .label(label)
+                .build();
+    }
+
 
 }
