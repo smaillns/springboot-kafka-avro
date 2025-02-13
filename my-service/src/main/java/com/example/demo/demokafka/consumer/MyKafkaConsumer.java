@@ -34,8 +34,7 @@ public class MyKafkaConsumer {
     public void consumePaymentEvents(ConsumerRecord<String, MyEvent> consumerRecord) {
         log.info("received event: {}", consumerRecord);
         var myEvent = consumerRecord.value();
-        MyModel model = MyModel.builder().id(myEvent.getId()).label(myEvent.getLabel()).build(); // TODO USE A DEDICATED MAPPER
-        myService.handleReceivedEvent(model);
+        myService.handleReceivedEvent(MyModel.fromEvent(myEvent));
     }
 
 }
