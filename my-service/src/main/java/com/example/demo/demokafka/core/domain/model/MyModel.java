@@ -1,4 +1,4 @@
-package com.example.demo.demokafka.model;
+package com.example.demo.demokafka.core.domain.model;
 
 import com.example.demo.demokafka.event.MyEvent;
 import lombok.AllArgsConstructor;

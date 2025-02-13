@@ -1,4 +1,4 @@
-package com.example.demo.demokafka.exceptions;
+package com.example.demo.demokafka.common.exceptions;
 
 
 public class TechnicalException extends RuntimeException {

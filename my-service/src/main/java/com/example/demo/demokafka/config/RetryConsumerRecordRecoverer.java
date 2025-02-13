@@ -10,8 +10,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.ConsumerRecordRecoverer;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 
-import static com.example.demo.demokafka.utils.KafkaUtil.addExceptionHeaders;
-import static com.example.demo.demokafka.utils.KafkaUtil.incrementRetryCountHeader;
+import static com.example.demo.demokafka.common.utils.KafkaUtil.addExceptionHeaders;
+import static com.example.demo.demokafka.common.utils.KafkaUtil.incrementRetryCountHeader;
 import static org.apache.commons.collections4.IterableUtils.toList;
 
 

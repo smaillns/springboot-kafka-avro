@@ -1,4 +1,4 @@
-package com.example.demo.demokafka.utils;
+package com.example.demo.demokafka.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nullable;

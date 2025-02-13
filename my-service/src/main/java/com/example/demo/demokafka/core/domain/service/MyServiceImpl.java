@@ -1,8 +1,8 @@
-package com.example.demo.demokafka.service;
+package com.example.demo.demokafka.core.domain.service;
 
 
-import com.example.demo.demokafka.exceptions.FunctionalException;
-import com.example.demo.demokafka.model.MyModel;
+import com.example.demo.demokafka.common.exceptions.FunctionalException;
+import com.example.demo.demokafka.core.domain.model.MyModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

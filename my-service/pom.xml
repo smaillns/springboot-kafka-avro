@@ -55,6 +55,12 @@
         <!--            <version>${avro.kafka.version}</version>-->
         <!--        </dependency>-->
 
+        <!-- Database -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
         <!-- Ops -->
         <dependency>
