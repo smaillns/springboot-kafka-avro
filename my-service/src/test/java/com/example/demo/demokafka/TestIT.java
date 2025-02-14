@@ -63,6 +63,9 @@ public class TestIT {
     @Value("${app.kafka.my-consumer.topic.error}")
     private String myDltTopic;
 
+    @Value("${app.kafka.my-consumer.topic.output}")
+    private String myOutputTopic;
+
     @Value("${app.kafka.my-consumer.schema-registry.url}")
     private String schemaRegistryUrl;
 
@@ -92,6 +95,7 @@ public class TestIT {
         kafkaTestUtils.registerSchema(1, myMainTopic, MyEvent.getClassSchema().toString());
         kafkaTestUtils.registerSchema(1, myRetryTopic, MyEvent.getClassSchema().toString());
         kafkaTestUtils.registerSchema(1, myDltTopic, MyEvent.getClassSchema().toString());
+        kafkaTestUtils.registerSchema(1, myOutputTopic, MyEvent.getClassSchema().toString());
 
         // Send Event
         File EVENT_JSON = Paths.get("src", "test", "resources", "events", "event.json").toFile();
@@ -102,6 +106,16 @@ public class TestIT {
             Optional<MyEntity> savedEntity = myRepository.findById(sentEvent.getId());
             savedEntity.ifPresent(myEntity -> assertEquals(sentEvent.getLabel(), myEntity.toModel().getLabel(), "The saved item should have the same id as the sent item"));
         });
+
+        // Check Event in the Output-topic
+        AtomicReference<ConsumerRecord<String, GenericRecord>> outputRecord = new AtomicReference<>();
+        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
+            kafkaTestUtils.setupConsumer(myOutputTopic, schemaRegistryUrl);
+            outputRecord.set(kafkaTestUtils.pollEvent(1000));
+            assertNotNull(outputRecord.get(), "Expected an event in the output topic but none was found");
+        });
+        MyEvent myEvent = KafkaTestUtils.deserializeGenericRecord(outputRecord.get().value(), MyEvent.class); // Deserialize the GenericRecord into MyEvent
+        assertEquals(sentEvent.getId(), myEvent.getId());
     }
 
     @Test
@@ -123,7 +137,7 @@ public class TestIT {
             retryRecord.set(kafkaTestUtils.pollEvent(1000));
             assertNotNull(retryRecord.get(), "Expected an event in retry topic but none was found");
         });
-        MyEvent myEvent = KafkaTestUtils.deserializeGenericRecord(retryRecord.get().value(), MyEvent.class); // Deserialize the GenericRecord into MyEvent
+        MyEvent myEvent = KafkaTestUtils.deserializeGenericRecord(retryRecord.get().value(), MyEvent.class);
         System.out.println("Mapped MyEvent: " + myEvent);
         assertEquals(sentEvent.getId(), myEvent.getId());
     }
