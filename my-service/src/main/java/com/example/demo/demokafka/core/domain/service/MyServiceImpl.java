@@ -2,6 +2,7 @@ package com.example.demo.demokafka.core.domain.service;
 
 
 import com.example.demo.demokafka.common.exceptions.FunctionalException;
+import com.example.demo.demokafka.core.adapter.messaging.KafkaMyEventProducer;
 import com.example.demo.demokafka.core.domain.model.MyModel;
 import com.example.demo.demokafka.core.port.MyEventDataGateway;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class MyServiceImpl implements MyService {
 
     private final MyEventDataGateway myEventDataGateway;
-
+    private final KafkaMyEventProducer publisher;
 
     @Override
     public void handleReceivedEvent(MyModel model) {
@@ -24,5 +25,6 @@ public class MyServiceImpl implements MyService {
         }
         log.info("Handling model: " + model);
         myEventDataGateway.saveEvent(model);
+        publisher.publishOutputEvent(model);
     }
 }

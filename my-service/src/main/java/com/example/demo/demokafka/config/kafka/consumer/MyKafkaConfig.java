@@ -1,6 +1,7 @@
-package com.example.demo.demokafka.config;
+package com.example.demo.demokafka.config.kafka.consumer;
 
 
+import com.example.demo.demokafka.config.kafka.CommonKafkaConfig;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

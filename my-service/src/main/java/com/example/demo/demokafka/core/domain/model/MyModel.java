@@ -31,4 +31,11 @@ public class MyModel {
                     .label(event.getLabel())
                     .build();
     }
+
+    public MyEvent toEvent()  {
+        return MyEvent.newBuilder()
+                .setId(id)
+                .setLabel(label)
+                .build();
+    }
 }

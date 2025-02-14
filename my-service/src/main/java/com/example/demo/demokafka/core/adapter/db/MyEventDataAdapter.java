@@ -11,12 +11,15 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MyEventDataAdapter implements MyEventDataGateway {
 
-
     private final MyRepository myRepository;
-
 
     @Override
     public void saveEvent(MyModel event) {
         myRepository.save(MyEntity.fromModel(event));
+    }
+
+    @Override
+    public void publishEvent(MyModel event) {
+
     }
 }

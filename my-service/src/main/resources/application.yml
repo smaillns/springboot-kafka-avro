@@ -8,6 +8,10 @@ spring:
 #      value-serializer: com.example.demo.demokafka.config.KafkaEventSerializer
     listener:
       missing-topics-fatal: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mydatabase
+    username: myuser
+    password: mypassword
   jpa:
     hibernate:
       ddl-auto: update
@@ -32,6 +36,7 @@ app:
         main: ${TOPIC_MAIN}
         retry: ${TOPIC_RETRY}
         error: ${TOPIC_DLT}
+        output: ${TOPIC_OUTPUT}
       auto-offset-reset: latest
       bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}
       client-id: ${KAFKA_CLIENT_ID}

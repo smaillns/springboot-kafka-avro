@@ -1,4 +1,4 @@
-package com.example.demo.demokafka.config;
+package com.example.demo.demokafka.config.kafka;
 
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;

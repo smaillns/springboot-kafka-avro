@@ -1,8 +1,7 @@
-package com.example.demo.demokafka.config;
+package com.example.demo.demokafka.config.kafka;
 
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Configuration;

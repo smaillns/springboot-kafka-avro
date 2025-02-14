@@ -24,10 +24,6 @@ import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.File;
@@ -93,7 +89,6 @@ public class TestIT {
 
     @Test
     void testEventIsConsumedAndSavedToDatabase() throws Exception {
-
         kafkaTestUtils.registerSchema(1, myMainTopic, MyEvent.getClassSchema().toString());
         kafkaTestUtils.registerSchema(1, myRetryTopic, MyEvent.getClassSchema().toString());
         kafkaTestUtils.registerSchema(1, myDltTopic, MyEvent.getClassSchema().toString());

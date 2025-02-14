@@ -35,6 +35,7 @@ app:
         main: test_main_topic
         retry: test_retry_topic
         error: test_dlt_topic
+        output: test_output_topic
       auto-offset-reset: latest
       bootstrap-servers: localhost:9092
       client-id: test-client-id
