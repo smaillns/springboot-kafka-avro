@@ -40,6 +40,13 @@ project/
 ├── my-service/
 │   ├── src/
 │   │   ├── main/java/
+│   │   |        ├──  common
+│   │   |        ├──  config
+│   │   |        ├──  core
+│   │   |            ├──  adpater
+│   │   |            ├──  domain  
+│   │   |            ├──  port
+                 └── Application.java
 │   │   ├── test/
 │   └── pom.xml
 ├── scripts/
