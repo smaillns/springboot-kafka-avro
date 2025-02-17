@@ -5,21 +5,29 @@
 
 ## About
 
-> This project demonstrates the usage of Kafka Schema Registry with Avro serialization in a Spring Boot application. 
+> This project provides a sample implementation of **Spring Boot microservice** that integrates **Kafka** with **Avro** schema and a relational database 
 >
 > The setup includes Kafka configuration used in the [eyes-flows](https://github.com/dktunited/eyes-visibility) project, essential properties required to connect and interact with a Kafka broker.
 
+<div style="display: flex; flex-direction: column; align-items: center;">
+  <img src="./architecture.png" alt="Architecture" width="50%" />
+  <p><em>Solution Architecture</em></p>
+</div>
+
+> The μService follows the **Hexagonal** (or ports/adapter) architecture to ensure clear separation of concerns and maintainability :
+> - **Core Domain**: Contains the business logic and domain models.
+> - **Ports**: Define interfaces for incoming and outgoing interactions.
+> - **Adapters**: Implement the interfaces defined by the ports
+
 > [!NOTE]
-> The purpose is to focus on the Kafka configuration and make a POC of integration tests using two methods:
-> 1. Using the `EmbeddedKafka` provided by Spring in the `spring-kafka-test` dependency.
-> 2. ~~Setting up a Testcontainers ecosystem with Kafka, Zookeeper, and Confluent Schema Registry~~.
+> The focus is on providing a robust **testing** setup that ensures the microservice behaves as expected in a real-world environment.
 
 
 ## Project Structure
 
 The project is modular, consisting of:
 - `avro-schema`: A module for Avro schemas generation and management.
-- `my-service`: The main service module that includes the Spring Boot application, the kafka configuration and the integrationtests
+- `my-service`: The main service module that includes the Spring Boot application, the kafka configuration and the integration tests
 
 the directory structure of the project is as follows
 ```
@@ -78,12 +86,6 @@ This will start AKHQ with the specified configuration file, allowing you to mana
 
 ## Configuration
 
-<div >
-  <img src="./architecture.png" alt="Architecture" width="75%" />
-  <p><em>MyService Architecture</em></p>
-</div>
-
-
 
 ### Kafka Configuration
 The current configuration uses a retry topic and a DLT (Dead Letter Topic). The number of retries, delay, and other properties are configured in the application configuration files.
@@ -106,36 +108,49 @@ app:
 ```
 
 ## Running the application
-// .env file
+Before starting the application, follow these steps:
 
+1 - **Start the required services** by launching the Docker Compose setup:
+    
+```sh
+cd scripts/docker
+docker-compose up -d
+```
+This will start the Kafka broker, Schema Registry and PostgreSQL services
+
+2- Configure environment variables:
+- You can use `local.env` in your intelliJ run configuration to set the environment variables
+- **Note**: you may need to install the **Env File** plugin in IntelliJ to load the env variables automatically
+<div >
+  <img src="./intellij.png" alt="Architecture" width="75%" />
+</div>
 
 ## Integration Test
-### Using EmbeddedKafka
-The `EmbeddedKafka` provided by Spring in the `spring-kafka-test` dependency is used for integration tests.
+
+For integration tests, we're using
+- `EmbeddedKafka` provided by Spring in the `spring-kafka-test` dependency  for lightweight kafka broker simulation
+- `Wiremock`ed Schema Registry to simulate the Schema Registry behavior
+- `Testcontainers` to provide an ephemeral database instance
 
 
-### Using Testcontainers
-A Testcontainers ecosystem is set up with Kafka, Zookeeper, and Confluent Schema Registry for integration tests.
--- require docker
-add testcontainers.properties 
-or add this env variable  DOCKER_HOST=unix:///Users/mac-Z12SLOUN/.colima/default/docker.sock
 
 ### Running Tests
-To run the integration tests, use the following command:
+To run the integration tests, run:
     
 ```sh   
 mvn clean test
 ```
 
-looks at integration testing the application using Spring Boot test, with the embedded Kafka broker and a wiremocked Schema Registry.
+> [!NOTE]
+> Ensure you have a Docker environment running before executing the tests.
+> If you are using Colima for Docker, you may encounter issues with Testcontainers. To resolve them, set the following environment variables before running the tests:
+>```sh
+>export DOCKER_HOST=unix:///Users/<your-username>/.colima/default/docker.sock
+>export TESTCONTAINERS_RYUK_DISABLED=true
+>```
+
+
+
 
 -----
-
-## Additional Resources
-For more information on Kafka, Avro, and Schema Registry, you can refer to the following resources:
-- [Apache Kafka Documentation](https://kafka.apache.org/documentation/)
-- [Confluent Schema Registry Documentation](https://docs.confluent.io/platform/current/schema-registry/index.html)
-- [Spring for Apache Kafka](https://spring.io/projects/spring-kafka)
-- [Avro Documentation](https://avro.apache.org/docs/++version++/index)
-
 
