@@ -17,9 +17,4 @@ public class MyEventDataAdapter implements MyEventDataGateway {
     public void saveEvent(MyModel event) {
         myRepository.save(MyEntity.fromModel(event));
     }
-
-    @Override
-    public void publishEvent(MyModel event) {
-
-    }
 }
