@@ -21,4 +21,25 @@ Feature: consuming, persist and sending events with retry & DLT
       id: 1
       label: a label
       """
+    And it is not true that the test_retry_topic topic contains 1 messages
     
+    Scenario: when an error occurs, then the event is sent to the retry topic
+      When this myevent is published on the test_main_topic topic:
+        """
+        id: 0
+        label: a label
+        """
+      
+      Then within 10000ms the test_retry_topic topic contains this myevent:
+        """
+        id: 0
+        label: a label
+        """
+      And it is not true that the test_main_topic topic contains this myevent:
+        """
+        id: 0
+        label: a label
+        """
+      
+      
+      
