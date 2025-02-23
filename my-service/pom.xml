@@ -15,11 +15,13 @@
 
     <properties>
         <java.version>23</java.version>
-        <avro.kafka.version>7.7.1</avro.kafka.version>
+        <avro.kafka.version>7.8.0</avro.kafka.version>
         <avro.version>1.12.0</avro.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <avro-maven-plugin.version>1.12.0</avro-maven-plugin.version>
     </properties>
+
+
     <dependencies>
         <dependency>
             <groupId>com.example.demo</groupId>
@@ -49,11 +51,6 @@
             <artifactId>kafka-avro-serializer</artifactId>
             <version>${avro.kafka.version}</version>
         </dependency>
-        <!--        <dependency>--> <!-- Uncomment this if you want to use Kafka Streams -->
-        <!--            <groupId>io.confluent</groupId>-->
-        <!--            <artifactId>kafka-streams-avro-serde</artifactId>-->
-        <!--            <version>${avro.kafka.version}</version>-->
-        <!--        </dependency>-->
 
         <!-- Database -->
         <dependency>
@@ -109,7 +106,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-contract-wiremock</artifactId>
-            <version>4.0.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -131,6 +127,25 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2023.0.0</version> <!-- Use the appropriate version for your Spring Boot version -->
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
