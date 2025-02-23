@@ -12,6 +12,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+import static com.decathlon.tzatziki.utils.MockFaster.url;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @CucumberContextConfiguration
@@ -26,6 +27,8 @@ public class DemoKafkaSteps {
     static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
         public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+            System.setProperty("EXTERNAL_URL", url());
+
             KafkaSteps.start(); // this will start the embedded kafka
             postgres.start(); // this will start the embedded postgres
             
