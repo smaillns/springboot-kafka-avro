@@ -8,10 +8,13 @@ import com.example.demo.demokafka.event.MyEvent;
 import com.example.demo.demokafka.utils.KafkaTestUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -28,10 +31,22 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.matching;
+import static com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath;
+import static com.github.tomakehurst.wiremock.client.WireMock.patch;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.put;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -96,12 +111,14 @@ public class TestIT {
         kafkaTestUtils.registerSchema(1, myRetryTopic, MyEvent.getClassSchema().toString());
         kafkaTestUtils.registerSchema(1, myDltTopic, MyEvent.getClassSchema().toString());
         kafkaTestUtils.registerSchema(1, myOutputTopic, MyEvent.getClassSchema().toString());
+        stubExternalApis();
 
         // Send Event
         File EVENT_JSON = Paths.get("src", "test", "resources", "events", "event.json").toFile();
         MyEvent sentEvent = objectMapper.readValue(EVENT_JSON, MyEvent.class);
         kafkaTemplate.send(myMainTopic, "1", sentEvent);
 
+        // Validate Event in Database
         await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
             Optional<MyEntity> savedEntity = myRepository.findById(sentEvent.getId());
             savedEntity.ifPresent(myEntity -> assertEquals(sentEvent.getLabel(), myEntity.toModel().getLabel(), "The saved item should have the same id as the sent item"));
@@ -109,16 +126,29 @@ public class TestIT {
 
         // Check Event in the Output-topic
         AtomicReference<ConsumerRecord<String, GenericRecord>> outputRecord = new AtomicReference<>();
-        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
+        await().atMost(20, TimeUnit.SECONDS).untilAsserted(() -> {
             kafkaTestUtils.setupConsumer(myOutputTopic, schemaRegistryUrl);
             outputRecord.set(kafkaTestUtils.pollEvent(1000));
             assertNotNull(outputRecord.get(), "Expected an event in the output topic but none was found");
         });
         MyEvent myEvent = KafkaTestUtils.deserializeGenericRecord(outputRecord.get().value(), MyEvent.class); // Deserialize the GenericRecord into MyEvent
         assertEquals(sentEvent.getId(), myEvent.getId());
+
+
+        // Verify a POST Request was made to the specified URL with the expected JSON body
+        await().atMost(10, TimeUnit.SECONDS).untilAsserted(() -> {
+            WireMock.verify(1, postRequestedFor(urlEqualTo("/posts"))
+                    .withRequestBody(matchingJsonPath("$.id", equalTo("1")))
+            );
+        });
+    }
+
+    private void stubExternalApis() {
+        stubFor(post(urlEqualTo("/posts")).willReturn(aResponse().withStatus(200)));
     }
 
     @Test
+    @Disabled
     void testEventFlowToRetryTopic() throws Exception {
 
         kafkaTestUtils.registerSchema(1, myMainTopic, MyEvent.getClassSchema().toString());

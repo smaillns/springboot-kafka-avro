@@ -10,7 +10,7 @@
 > The setup includes Kafka configuration used in the [eyes-flows](https://github.com/dktunited/eyes-visibility) project, essential properties required to connect and interact with a Kafka broker.
 
 <div >
-  <img src="architecture_.png" alt="Architecture" width="70%" />
+  <img src="architecture.png" alt="Architecture" width="70%" />
   <p><em>Solution Architecture</em></p>
 </div>
 

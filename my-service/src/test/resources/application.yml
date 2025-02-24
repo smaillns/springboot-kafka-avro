@@ -50,6 +50,8 @@ app:
         value-deserializer-specific-avro-reader: true
       schema-registry:
         url: http://localhost:${wiremock.server.port}/
+  external-api:
+    url: http://localhost:${wiremock.server.port}/
 
 logging:
   level:
