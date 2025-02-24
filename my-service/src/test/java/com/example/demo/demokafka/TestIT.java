@@ -148,7 +148,6 @@ public class TestIT {
     }
 
     @Test
-    @Disabled
     void testEventFlowToRetryTopic() throws Exception {
 
         kafkaTestUtils.registerSchema(1, myMainTopic, MyEvent.getClassSchema().toString());
