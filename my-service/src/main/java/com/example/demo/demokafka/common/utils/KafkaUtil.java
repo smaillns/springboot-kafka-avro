@@ -22,7 +22,6 @@ import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
 @NoArgsConstructor (access = PRIVATE)
 public class KafkaUtil {
 
-	public static final ObjectMapper objectMapper = new ObjectMapper();
 	public static final String RETRY_COUNT_HEADER = "retry_count";
 	public static final String ERROR_MESSAGE_HEADER = "error_message";
 	public static final String ERROR_DATE_HEADER = "error_date";

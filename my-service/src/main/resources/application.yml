@@ -52,6 +52,8 @@ app:
         value-deserializer-specific-avro-reader: true
       schema-registry:
         url: ${SCHEMA_REGISTRY_URL}
+  external-api:
+    url: ${EXTERNAL_URL}
 
 
 logging:
