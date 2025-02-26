@@ -24,8 +24,8 @@ Feature: consuming, persist and sending events with retry & DLT
       """
       {{{[&features/fixtures/event.yaml]}}}
       """
-    And "/posts" has received 1 POST payload
-#    And payload[0].body.json.containers[0].zones.size == 2
+    And within 5000ms "/posts" has received 1 POST payload
+    And payload.body.json.id == 1
 
     And it is not true that the test_retry_topic topic contains 1 messages
     And it is not true that the test_dlt_topic topic contains 1 messages
