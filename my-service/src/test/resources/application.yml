@@ -47,7 +47,7 @@ app:
 #       schema-registry:
 #         url: http://localhost:${wiremock.server.port}/
   external-api:
-    url: http://jsonplaceholder.typicode.com
+    url: ${EXTERNAL_URL}
 
 logging:
   level:
