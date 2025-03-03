@@ -15,13 +15,14 @@
 
     <properties>
         <java.version>23</java.version>
-        <avro.kafka.version>7.8.0</avro.kafka.version>
+        <avro.kafka.version>7.7.1</avro.kafka.version>
         <avro.version>1.12.0</avro.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <avro-maven-plugin.version>1.12.0</avro-maven-plugin.version>
+        <tzatziki.version>1.8.2</tzatziki.version>
+        <testcontainers.version>1.17.6</testcontainers.version>
+        <maven-cucumber-reporting.version>5.8.5</maven-cucumber-reporting.version>
     </properties>
-
-
     <dependencies>
         <dependency>
             <groupId>com.example.demo</groupId>
@@ -51,6 +52,11 @@
             <artifactId>kafka-avro-serializer</artifactId>
             <version>${avro.kafka.version}</version>
         </dependency>
+        <!--        <dependency>--> <!-- Uncomment this if you want to use Kafka Streams -->
+        <!--            <groupId>io.confluent</groupId>-->
+        <!--            <artifactId>kafka-streams-avro-serde</artifactId>-->
+        <!--            <version>${avro.kafka.version}</version>-->
+        <!--        </dependency>-->
 
         <!-- Database -->
         <dependency>
@@ -94,58 +100,24 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-contract-wiremock</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-            <version>1.19.3</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
-            <version>1.19.3</version>
+            <version>1.20.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>1.19.3</version>
+            <groupId>com.decathlon.tzatziki</groupId>
+            <artifactId>tzatziki-spring-jpa</artifactId>
+            <version>${tzatziki.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.decathlon.tzatziki</groupId>
+            <artifactId>tzatziki-spring-kafka</artifactId>
+            <version>${tzatziki.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>confluent</id>
-            <url>https://packages.confluent.io/maven/</url>
-        </repository>
-    </repositories>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>2023.0.0</version> <!-- Use the appropriate version for your Spring Boot version -->
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
@@ -154,8 +126,30 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
+                <groupId>net.masterthought</groupId>
+                <artifactId>maven-cucumber-reporting</artifactId>
+                <version>${maven-cucumber-reporting.version}</version>
+                <executions>
+                    <execution>
+                        <id>execution</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <projectName>cucumberReporting</projectName>
+                            <skip>false</skip>
+                            <outputDirectory>${project.build.directory}/site</outputDirectory>
+                            <inputDirectory>${project.build.directory}/</inputDirectory>
+                            <jsonFiles>
+                                <param>cucumber.json</param>
+                            </jsonFiles>
+                            <mergeFeaturesById>false</mergeFeaturesById>
+                            <mergeFeaturesWithRetest>false</mergeFeaturesWithRetest>
+                            <checkBuildResult>false</checkBuildResult>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>

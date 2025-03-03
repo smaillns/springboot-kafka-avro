@@ -7,10 +7,6 @@ spring:
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
     listener:
       missing-topics-fatal: false
-  datasource:
-    url: jdbc:postgresql://localhost:5432/mydatabase
-    username: user
-    password: password
   jpa:
     hibernate:
       ddl-auto: update
@@ -48,10 +44,10 @@ app:
         deserializer-value-delegate-class: io.confluent.kafka.serializers.KafkaAvroDeserializer
         json-trusted-packages: '"*"'
         value-deserializer-specific-avro-reader: true
-      schema-registry:
-        url: http://localhost:${wiremock.server.port}/
+#       schema-registry:
+#         url: http://localhost:${wiremock.server.port}/
   external-api:
-    url: http://localhost:${wiremock.server.port}/
+    url: ${EXTERNAL_URL}
 
 logging:
   level:
