@@ -19,7 +19,7 @@
         <avro.version>1.12.0</avro.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <avro-maven-plugin.version>1.12.0</avro-maven-plugin.version>
-        <tzatziki.version>1.8.1</tzatziki.version>
+        <tzatziki.version>1.8.2</tzatziki.version>
         <testcontainers.version>1.17.6</testcontainers.version>
         <maven-cucumber-reporting.version>5.8.5</maven-cucumber-reporting.version>
     </properties>
