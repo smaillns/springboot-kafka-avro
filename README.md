@@ -5,9 +5,13 @@
 
 ## About
 
-> This project provides a sample implementation of **Spring Boot microservice** that integrates **Kafka** with **Avro** schema and a relational database 
->
-> The setup includes Kafka configuration used in the [eyes-flows](https://github.com/dktunited/eyes-visibility) project, essential properties required to connect and interact with a Kafka broker.
+> This project provides a sample implementation of **Spring Boot microservice** that integrates **Kafka** with **Avro** schema and communicate with an external API & a relational database 
+
+> [!NOTE]  
+> The focus is on providing a robust **testing** setup that ensures the microservice behaves as expected in a real-world environment.
+> A Gherkin [scenario]((https://github.com/smaillns/springboot-kafka-avro/blob/tzatziki/my-service/src/test/resources/features/kafka.feature)) for an **integration test** is included, implemented using [Tzatziki framework](https://github.com/Decathlon/tzatziki).  
+> There is an equivalent [test](https://github.com/smaillns/springboot-kafka-avro/blob/master/my-service/src/test/java/com/example/demo/demokafka/TestIT.java) for the classic method using **Testcontainers** and **Embedded Kafka**.
+
 
 <div >
   <img src="architecture.png" alt="Architecture" width="70%" />
@@ -19,8 +23,6 @@
 > - **Ports**: Define interfaces for incoming and outgoing interactions.
 > - **Adapters**: Implement the interfaces defined by the ports
 
-> [!NOTE]
-> The focus is on providing a robust **testing** setup that ensures the microservice behaves as expected in a real-world environment.
 
 
 ## Project Structure
