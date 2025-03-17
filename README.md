@@ -10,7 +10,7 @@
 
 > [!NOTE]  
 > An example of a full scenario **integration [test](https://github.com/smaillns/springboot-kafka-avro/blob/master/my-service/src/test/java/com/example/demo/demokafka/TestIT.java)** is also included, implemented using **Testcontainers** and **Embedded Kafka**.  
-> There is also a `tzatziki`  ⑆[branch](https://github.com/smaillns/springboot-kafka-avro/tree/tzatziki) that implements the equivalent using the [Tzatziki framework](https://github.com/Decathlon/tzatziki).
+> There is also a `tzatziki`-leveraged  ⑆[branch](https://github.com/smaillns/springboot-kafka-avro/tree/tzatziki) that implements the equivalent using the [Tzatziki framework](https://github.com/Decathlon/tzatziki).
 
 
 <div >
