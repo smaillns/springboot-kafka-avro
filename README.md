@@ -50,6 +50,7 @@ project/
 │   │   |            ├──  port
                  └── Application.java
 │   │   ├── test/
+            └── test.feature
 │   └── pom.xml
 ├── scripts/
 │   ├── docker/

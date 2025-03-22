@@ -79,7 +79,6 @@ public class CommonKafkaConfig<K, V> {
 	public ProducerFactory<K, V> producerResource(KafkaProperties producerProperty) {
 		Map<String, Object> producerProperties = producerProperty.buildProducerProperties(null);
 		buildRegistryProperties(producerProperties);
-//		buildSslProperties(producerProperties);
 		return new DefaultKafkaProducerFactory<>(producerProperties);
 	}
 
